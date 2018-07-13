@@ -19,7 +19,7 @@ describe "Mole::Asn1::IO#fetch_ber" do
     ber = OpenSSL::ASN1::Integer(5).to_der
     @w.write(ber)
     @w.write('abc')
-    @r.fetch_ber.should == ber
+    expect(@r.fetch_ber).to eq(ber)
   end
 
   it "should read sequence ber." do
@@ -29,14 +29,14 @@ describe "Mole::Asn1::IO#fetch_ber" do
 
     @w.write(ber)
     @w.write('abcde')
-    @r.fetch_ber.should == ber
+    expect(@r.fetch_ber).to eq(ber)
   end
 
   it "should read long form ber." do
     ber = OpenSSL::ASN1::ASN1Data.new('abc', tag=31, tag_class=:APPLICATION).to_der
     @w.write(ber)
     @w.write('ccccc')
-    @r.fetch_ber.should == ber
+    expect(@r.fetch_ber).to eq(ber)
   end
 
   it "should read indefinite length ber." do
@@ -51,6 +51,6 @@ describe "Mole::Asn1::IO#fetch_ber" do
 
     @w.write(ber)
     @w.write('beiw')
-    @r.fetch_ber.should == ber
+    expect(@r.fetch_ber).to eq(ber)
   end
 end

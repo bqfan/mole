@@ -23,7 +23,7 @@ describe "Mole::Asn1::IO#fetch_ber_length" do
 
     @w.write(s)
     @w.write('abc')
-    @r.send(:fetch_ber_length).should == [length, s]
+    expect(@r.send(:fetch_ber_length)).to eq([length, s])
   end
 
   it "should read length when the length is long form." do
@@ -35,6 +35,6 @@ describe "Mole::Asn1::IO#fetch_ber_length" do
 
     @w.write(s)
     @w.write('abc')
-    @r.send(:fetch_ber_length).should == [length, s]
+    expect(@r.send(:fetch_ber_length)).to eq([length, s])
   end
 end

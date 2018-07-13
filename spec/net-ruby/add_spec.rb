@@ -23,16 +23,19 @@ describe "Net::LDAP#add" do
   it "should be succeeded." do
     @ldap.open { |ldap|
       dn = 'dc=example,dc=com'
-      attributes = {dc: 'example', objectClass: ['oaganizationalUnit']}
-      ldap.add(dn: dn, attributes: attributes).should be_true
+      attributes = {dc: 'example', objectClass: ['organizationalUnit']}
+      #ldap.add(dn: dn, attributes: attributes).should be_true
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_truthy
 
       dn = 'ou=People,dc=example,dc=com'
       attributes = {ou: 'People', objectClass: ['organizationalUnit']}
-      ldap.add(dn: dn, attributes: attributes).should be_true
+      #ldap.add(dn: dn, attributes: attributes).should be_true
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_truthy
 
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       attributes = {uid: 'sato', objectClass: ['posixAccont']}
-      ldap.add(dn: dn, attributes: attributes).should be_true
+      #ldap.add(dn: dn, attributes: attributes).should be_true
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_truthy
     }
   end
 
@@ -40,8 +43,8 @@ describe "Net::LDAP#add" do
     @ldap.open { |ldap|
       dn = 'dc=example,dc=com'
       attributes = {dc: 'example', objectClass: ['oaganizationalUnit']}
-      ldap.add(dn: dn, attributes: attributes).should be_true
-      ldap.add(dn: dn, attributes: attributes).should be_false
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_truthy
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_falsy
     }
   end
 
@@ -49,12 +52,12 @@ describe "Net::LDAP#add" do
     @ldap.open { |ldap|
       dn = 'dc=example,dc=com'
       attributes = {dc: 'example', objectClass: ['oaganizationalUnit']}
-      ldap.add(dn: dn, attributes: attributes).should be_true
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_truthy
 
 
       dn = 'dc=samle,dc=com'
       attributes = {dc: 'sample', objectClass: ['oaganizationalUnit']}
-      ldap.add(dn: dn, attributes: attributes).should be_false
+      expect(ldap.add(dn: dn, attributes: attributes)).to be_falsy
     }
   end
 

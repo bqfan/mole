@@ -39,35 +39,35 @@ describe "Net::LDAP#delete" do
 
   it "should succeed to delete leaf dn." do
     @ldap.open do |ldap|
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
-      ldap.delete(dn: 'uid=sato,ou=People,dc=example,dc=com').should be_true
-      ldap.search(base: 'dc=example,dc=com').length.should == 5
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
+      expect(ldap.delete(dn: 'uid=sato,ou=People,dc=example,dc=com')).to be_truthy
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(5)
     end
   end
 
   it "should fail to delete not leaf dn." do
     @ldap.open do |ldap|
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
-      ldap.delete(dn: 'ou=People,dc=example,dc=com').should be_false
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
+      expect(ldap.delete(dn: 'ou=People,dc=example,dc=com')).to be_falsy
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
     end
   end
 
   it "should succeed to delete not leaf dn after all child dn is deleted." do
     @ldap.open do |ldap|
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
-      ldap.delete(dn: 'uid=sato,ou=People,dc=example,dc=com').should be_true
-      ldap.delete(dn: 'uid=suzuki,ou=People,dc=example,dc=com').should be_true
-      ldap.delete(dn: 'ou=People,dc=example,dc=com').should be_true
-      ldap.search(base: 'dc=example,dc=com').length.should == 3
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
+      expect(ldap.delete(dn: 'uid=sato,ou=People,dc=example,dc=com')).to be_truthy
+      expect(ldap.delete(dn: 'uid=suzuki,ou=People,dc=example,dc=com')).to be_truthy
+      expect(ldap.delete(dn: 'ou=People,dc=example,dc=com')).to be_truthy
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(3)
     end
   end
 
   it "should fail to delete not existed entry." do
     @ldap.open do |ldap|
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
-      ldap.delete(dn: 'uid=kato,ou=People,dc=example,dc=com').should be_false
-      ldap.search(base: 'dc=example,dc=com').length.should == 6
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
+      expect(ldap.delete(dn: 'uid=kato,ou=People,dc=example,dc=com')).to be_falsy
+      expect(ldap.search(base: 'dc=example,dc=com').length).to eq(6)
     end
   end
 

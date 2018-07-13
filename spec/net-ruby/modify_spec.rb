@@ -47,7 +47,7 @@ describe "Net::LDAP#modify" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       ldap.modify(dn: dn, operations: [[:add, :mobile, ['000-0000-0000']]])
-      ldap.search(base: dn, attributes: ['mobile'])[0][:mobile].should == ['000-0000-0000']
+      expect(ldap.search(base: dn, attributes: ['mobile'])[0][:mobile]).to eq(['000-0000-0000'])
     end
   end
 
@@ -55,13 +55,13 @@ describe "Net::LDAP#modify" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       ldap.modify(dn: dn, operations: [[:replace, :mail, ['sato@example.com']]])
-      ldap.search(base: dn, attributes: ['mail'])[0][:mail].should == ['sato@example.com']
+      expect(ldap.search(base: dn, attributes: ['mail'])[0][:mail]).to eq(['sato@example.com'])
 
       ldap.modify(dn: dn, operations: [[:replace, :mail, ['sato@example.org', 'sato@example.net']]])
-      ldap.search(base: dn, attributes: ['mail'])[0][:mail].should == ['sato@example.org', 'sato@example.net']
+      expect(ldap.search(base: dn, attributes: ['mail'])[0][:mail]).to eq(['sato@example.org', 'sato@example.net'])
 
       ldap.modify(dn: dn, operations: [[:replace, :mail, []]])
-      ldap.search(base: dn, attributes: ['mail'])[0][:mail].should be_empty
+      expect(ldap.search(base: dn, attributes: ['mail'])[0][:mail]).to be_empty
     end
   end
 
@@ -69,10 +69,10 @@ describe "Net::LDAP#modify" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       ldap.modify(dn: dn, operations: [[:delete, :objectClass, ['inetOrgPerson']]])
-      ldap.search(base: dn, attributes: ['objectClass'])[0][:objectClass].should == ['posixAccount']
+      expect(ldap.search(base: dn, attributes: ['objectClass'])[0][:objectClass]).to eq(['posixAccount'])
 
       ldap.modify(dn: dn, operations: [[:delete, :mail, []]])
-      ldap.search(base: dn, attributes: ['mail'])[0][:mail].should be_empty
+      expect(ldap.search(base: dn, attributes: ['mail'])[0][:mail]).to be_empty
     end
   end
 
@@ -81,15 +81,15 @@ describe "Net::LDAP#modify" do
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       ldap.modify(dn: dn,
                   operations: [
-                    [:add, :mobile, ['000-0000-0000']],
-                    [:add, :mail, 'sato@example.biz'],
-                    [:replace, :mail, 'sato@example.net'],
-                    [:delete, :gidNumber]
+                      [:add, :mobile, ['000-0000-0000']],
+                      [:add, :mail, 'sato@example.biz'],
+                      [:replace, :mail, 'sato@example.net'],
+                      [:delete, :gidNumber]
                   ])
       entry = ldap.search(base: dn, attributes: ['mail', 'mobile', 'gidNumber'])[0]
-      entry['mail'].should == ['sato@example.net']
-      entry['mobile'].should == ['000-0000-0000']
-      entry['gidNumber'].should be_empty
+      expect(entry['mail']).to eq(['sato@example.net'])
+      expect( entry['mobile']).to eq(['000-0000-0000'])
+      expect(entry['gidNumber']).to be_empty
     end
   end
 
@@ -98,12 +98,13 @@ describe "Net::LDAP#modify" do
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       ldap.modify(dn: dn,
                   operations: [
-                    [:add, :mobile, ['000-0000-0000']],
-                    [:delete, :homedirectory]
+                      [:add, :mobile, ['000-0000-0000']],
+                      [:delete, :homedirectory]
                   ])
       entry = ldap.search(base: dn, attributes: ['mobile', 'homedirectory'])[0]
-      entry['mobile'].should be_empty
-      entry['homedirectory'].should be_empty
+      expect(entry['mobile']).to be_empty
+      expect(entry['homedirectory']).to be_empty
     end
   end
 end
+

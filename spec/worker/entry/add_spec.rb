@@ -16,53 +16,53 @@ describe "Mole::Worker::Entry#add" do
   end
 
   it "should succeed to add basedn and child entries." do
-    @entry.add('dc=sample,dc=com',
+    expect(@entry.add('dc=sample,dc=com',
                [ ['dc', ['sample']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    @entry.add('ou=People,dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(@entry.add('ou=People,dc=sample,dc=com',
                [ ['ou', ['People']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    @entry.add('uid=sato,ou=People,dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(@entry.add('uid=sato,ou=People,dc=sample,dc=com',
                [ ['uid', ['sato']],
-                 ['objectclass', ['posixAccount', 'inetOrgPerson']] ]).should be_true
-    @entry.add('ou=Group,dc=sample,dc=com',
+                 ['objectclass', ['posixAccount', 'inetOrgPerson']] ])).to be_truthy
+    expect(@entry.add('ou=Group,dc=sample,dc=com',
                [ ['ou', ['Group']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    @entry.add('gid=users,ou=Group,dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(@entry.add('gid=users,ou=Group,dc=sample,dc=com',
                [ ['gid', ['users']],
-                 ['objectClass', ['posixGroup']] ]).should be_true
-    @entry.add('uid=suzuki,ou=People,dc=sample,dc=com',
+                 ['objectClass', ['posixGroup']] ])).to be_truthy
+    expect(@entry.add('uid=suzuki,ou=People,dc=sample,dc=com',
                [ ['uid', ['suzuki']],
-                 ['objectclass', ['posixAccount', 'inetOrgPerson']] ]).should be_true
+                 ['objectclass', ['posixAccount', 'inetOrgPerson']] ])).to be_truthy
   end
 
   it "should fail to add duplicated entries." do
-    @entry.add('dc=sample,dc=com',
+    expect(@entry.add('dc=sample,dc=com',
                [ ['dc', ['sample']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    proc {
-      @entry.add('dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(proc {
+      expect(@entry.add('dc=sample,dc=com',
                  [ ['dc', ['sample']],
-                   ['objectclass', ['organizationalUnit']] ]).should be_true
-    }.should raise_error(@error::EntryAlreadyExistsError)
-    @entry.add('ou=People,dc=sample,dc=com',
+                   ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    }).to raise_error(@error::EntryAlreadyExistsError)
+    expect(@entry.add('ou=People,dc=sample,dc=com',
                [ ['ou', ['People']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    proc {
-      @entry.add('ou=People,dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(proc {
+      expect(@entry.add('ou=People,dc=sample,dc=com',
                  [ ['ou', ['People']],
-                   ['objectclass', ['organizationalUnit']] ]).should be_true
-    }.should raise_error(@error::EntryAlreadyExistsError)
+                   ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    }).to raise_error(@error::EntryAlreadyExistsError)
   end
 
   it "should fail if parent dn doesn't exist." do
-    @entry.add('dc=sample,dc=com',
+    expect(@entry.add('dc=sample,dc=com',
                [ ['dc', ['sample']],
-                 ['objectclass', ['organizationalUnit']] ]).should be_true
-    proc {
-      @entry.add('uid=sato,ou=People,dc=sample,dc=com',
+                 ['objectclass', ['organizationalUnit']] ])).to be_truthy
+    expect(proc {
+      expect(@entry.add('uid=sato,ou=People,dc=sample,dc=com',
                  [ ['uid', ['sato']],
-                   ['objectclass', ['posixAccount', 'inetOrgPerson']] ]).should be_true
-    }.should raise_error(@error::UnwillingToPerformError)
+                   ['objectclass', ['posixAccount', 'inetOrgPerson']] ])).to be_truthy
+    }).to raise_error(@error::UnwillingToPerformError)
   end
 end

@@ -16,7 +16,7 @@ describe "Net::LDAP#bind" do
   it "should be succeeded with annonymous auth." do
     ldap = Net::LDAP.new
     ldap.port = 3890
-    ldap.bind.should be_true
+    expect(ldap.bind).to be_truthy
   end
 
 end

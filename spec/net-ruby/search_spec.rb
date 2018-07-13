@@ -39,30 +39,30 @@ describe "Net::LDAP#search" do
 
   it "should search all entries under specified subtree." do
     @ldap.open do |ldap|
-      ldap.search.length.should == 6
-      ldap.search(base: "ou=People,dc=example,dc=com").length.should == 3
-      ldap.search(base: "uid=sato,ou=People,dc=example,dc=com").length.should == 1
-      ldap.search(base: "dc=sample,dc=com").should be_nil
+      expect(ldap.search.length).to eq(6)
+      expect(ldap.search(base: "ou=People,dc=example,dc=com").length).to eq(3)
+      expect(ldap.search(base: "uid=sato,ou=People,dc=example,dc=com").length).to eq(1)
+      expect(ldap.search(base: "dc=sample,dc=com")).to be_nil
     end
   end
 
   it "should hit at most one entry when scope is base object." do
     scope = Net::LDAP::SearchScope_BaseObject
     @ldap.open do |ldap|
-      ldap.search(scope: scope).length.should == 1
-      ldap.search(base: "ou=People,dc=example,dc=com", scope: scope).length.should == 1
-      ldap.search(base: "uid=sato,ou=People,dc=example,dc=com", scope: scope).length.should == 1
-      ldap.search(base: "dc=sample,dc=com", scope: scope).should be_nil
+      expect(ldap.search(scope: scope).length).to eq(1)
+      expect(ldap.search(base: "ou=People,dc=example,dc=com", scope: scope).length).to eq(1)
+      expect(ldap.search(base: "uid=sato,ou=People,dc=example,dc=com", scope: scope).length).to eq(1)
+      expect(ldap.search(base: "dc=sample,dc=com", scope: scope)).to be_nil
     end
   end
 
   it "should hit only specified entry and single level children." do
     scope = Net::LDAP::SearchScope_SingleLevel
     @ldap.open do |ldap|
-      ldap.search(scope: scope).length.should == 3
-      ldap.search(base: "ou=People,dc=example,dc=com").length.should == 3
-      ldap.search(base: "uid=sato,ou=People,dc=example,dc=com", scope: scope).length.should == 1
-      ldap.search(base: "dc=sample,dc=com").should be_nil
+      expect(ldap.search(scope: scope).length).to eq(3)
+      expect(ldap.search(base: "ou=People,dc=example,dc=com").length).to eq(3)
+      expect(ldap.search(base: "uid=sato,ou=People,dc=example,dc=com", scope: scope).length).to eq(1)
+      expect(ldap.search(base: "dc=sample,dc=com")).to be_nil
     end
   end
 
@@ -71,9 +71,9 @@ describe "Net::LDAP#search" do
     attributes = ['uidNumber', 'foo']
     @ldap.open do |ldap|
       entry = ldap.search(base: "uid=sato,ou=People,dc=example,dc=com", scope: scope, attributes: attributes)[0]
-      entry[:uidNumber].should == ['10001']
-      entry[:foo].should be_empty
-      entry[:uid].should be_empty
+      expect(entry[:uidNumber]).to eq(['10001'])
+      expect(entry[:foo]).to be_empty
+      expect(entry[:uid]).to be_empty
     end
   end
 
@@ -81,10 +81,10 @@ describe "Net::LDAP#search" do
     filter1 = Net::LDAP::Filter.equals('gidNumber', '10001')
     filter2 = Net::LDAP::Filter.present('uidNumber')
     @ldap.open do |ldap|
-      ldap.search(filter: filter1).length.should == 2
-      ldap.search(filter: filter2).length.should == 2
-      ldap.search(filter: Net::LDAP::Filter.join(filter1, filter2)).length.should == 1
-      ldap.search(filter: Net::LDAP::Filter.intersect(filter1, filter2)).length.should == 3
+      expect(ldap.search(filter: filter1).length).to eq(2)
+      expect(ldap.search(filter: filter2).length).to eq(2)
+      expect(ldap.search(filter: Net::LDAP::Filter.join(filter1, filter2)).length).to eq(1)
+      expect(ldap.search(filter: Net::LDAP::Filter.intersect(filter1, filter2)).length).to eq(3)
     end
   end
 
@@ -93,10 +93,10 @@ describe "Net::LDAP#search" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       entry = ldap.search(base: dn, scope: scope, attributes: [])[0]
-      entry[:objectClass].should_not be_empty
-      entry[:uid].should_not be_empty
-      entry[:uidNumber].should_not be_empty
-      entry[:gidNumber].should_not be_empty
+      expect(entry[:objectClass]).not_to be_empty
+      expect(entry[:uid]).not_to be_empty
+      expect(entry[:uidNumber]).not_to be_empty
+      expect(entry[:gidNumber]).not_to be_empty
     end
   end
 
@@ -105,22 +105,22 @@ describe "Net::LDAP#search" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       entry = ldap.search(base: dn, scope: scope, attributes: ['*'])[0]
-      entry[:objectClass].should_not be_empty
-      entry[:uid].should_not be_empty
-      entry[:uidNumber].should_not be_empty
-      entry[:gidNumber].should_not be_empty
+      expect(entry[:objectClass]).not_to be_empty
+      expect(entry[:uid]).not_to be_empty
+      expect(entry[:uidNumber]).not_to be_empty
+      expect(entry[:gidNumber]).not_to be_empty
 
       entry = ldap.search(base: dn, scope: scope, attributes: ['*', 'uid'])[0]
-      entry[:objectClass].should_not be_empty
-      entry[:uid].should_not be_empty
-      entry[:uidNumber].should_not be_empty
-      entry[:gidNumber].should_not be_empty
+      expect(entry[:objectClass]).not_to be_empty
+      expect(entry[:uid]).not_to be_empty
+      expect(entry[:uidNumber]).not_to be_empty
+      expect(entry[:gidNumber]).not_to be_empty
 
       entry = ldap.search(base: dn, scope: scope, attributes: ['*', 'foo'])[0]
-      entry[:objectClass].should_not be_empty
-      entry[:uid].should_not be_empty
-      entry[:uidNumber].should_not be_empty
-      entry[:gidNumber].should_not be_empty
+      expect(entry[:objectClass]).not_to be_empty
+      expect(entry[:uid]).not_to be_empty
+      expect(entry[:uidNumber]).not_to be_empty
+      expect(entry[:gidNumber]).not_to be_empty
     end
   end
 
@@ -129,22 +129,22 @@ describe "Net::LDAP#search" do
     @ldap.open do |ldap|
       dn = 'uid=sato,ou=People,dc=example,dc=com'
       entry = ldap.search(base: dn, scope: scope, attributes: ['1.1'])[0]
-      entry[:objectClass].should be_empty
-      entry[:uid].should be_empty
-      entry[:uidNumber].should be_empty
-      entry[:gidNumber].should be_empty
+      expect(entry[:objectClass]).to be_empty
+      expect(entry[:uid]).to be_empty
+      expect(entry[:uidNumber]).to be_empty
+      expect(entry[:gidNumber]).to be_empty
 
       entry = ldap.search(base: dn, scope: scope, attributes: ['1.1', 'uid'])[0]
-      entry[:objectClass].should be_empty
-      entry[:uid].should_not be_empty
-      entry[:uidNumber].should be_empty
-      entry[:gidNumber].should be_empty
+      expect(entry[:objectClass]).to be_empty
+      expect(entry[:uid]).not_to be_empty
+      expect(entry[:uidNumber]).to be_empty
+      expect(entry[:gidNumber]).to be_empty
 
       entry = ldap.search(base: dn, scope: scope, attributes: ['1.1', 'foo'])[0]
-      entry[:objectClass].should be_empty
-      entry[:uid].should be_empty
-      entry[:uidNumber].should be_empty
-      entry[:gidNumber].should be_empty
+      expect(entry[:objectClass]).to be_empty
+      expect(entry[:uid]).to be_empty
+      expect(entry[:uidNumber]).to be_empty
+      expect(entry[:gidNumber]).to be_empty
     end
   end
 end
